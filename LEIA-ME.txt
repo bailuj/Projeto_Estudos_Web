@@ -1,0 +1,20 @@
+CENTRAL DE ESTUDOS WEB
+
+Esta pasta contém três páginas HTML:
+
+- index.html: página inicial para escolher um assunto.
+- webwriting.html: site de Webwriting, incluindo o testador.
+- seo-seguranca.html: site REDLINE de SEO e páginas web seguras.
+
+COMO ABRIR
+Dê dois cliques em index.html. No navegador, clique no curso desejado.
+Você também pode abrir cada HTML diretamente.
+
+PARA EDITAR
+Abra a pasta no VS Code. Os dois sites mantêm seu HTML, CSS e JavaScript próprios, dentro do respectivo arquivo.
+
+PUBLICAÇÃO NO GITHUB PAGES
+Coloque todos os arquivos no mesmo repositório ou na pasta de publicação, na raiz, e ative o GitHub Pages. O arquivo index.html será a página inicial.
+Não é necessário instalar dependências.
+
+Observação: os testes interativos são ferramentas educativas locais, e não fazem auditoria remota de servidores.

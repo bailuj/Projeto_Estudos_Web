@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aprenda Webwriting com exemplos práticos, técnicas de escrita para a web, SEO, acessibilidade e um testador de textos interativo.">
+  <meta name="theme-color" content="#f6f7fb">
+  <title>Webwriting Lab | Escreva melhor para a web</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --surface-alt: #eff3fb;
+      --ink: #14233a;
+      --muted: #58667b;
+      --border: #dfe5ef;
+      --primary: #295be8;
+      --primary-hover: #1848cf;
+      --accent: #0ca890;
+      --soft-accent: #e2f7f1;
+      --soft-blue: #eaf0ff;
+      --shadow: 0 18px 50px rgba(25, 46, 85, .09);
+      --radius: 22px;
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #101827;
+      --surface: #192538;
+      --surface-alt: #202f46;
+      --ink: #f1f5fd;
+      --muted: #bdc9da;
+      --border: #34445e;
+      --primary: #8caaff;
+      --primary-hover: #b5c8ff;
+      --accent: #71e2c9;
+      --soft-accent: #153e3c;
+      --soft-blue: #223553;
+      --shadow: 0 18px 50px rgba(0, 0, 0, .22);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 95px; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.6; }
+    button, textarea, input { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    img, svg { display: block; max-width: 100%; }
+    button { cursor: pointer; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+    ::selection { background: #9fe9da; color: #11263d; }
+    .container { width: min(1140px, calc(100% - 40px)); margin-inline: auto; }
+    .skip-link { position: absolute; top: -70px; left: 16px; z-index: 100; padding: 10px 18px; background: var(--ink); color: var(--surface); border-radius: 10px; }
+    .skip-link:focus { top: 12px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; text-transform: uppercase; letter-spacing: .15em; color: var(--primary); font-weight: 800; font-size: .76rem; }
+    .eyebrow::before { content: ""; width: 23px; height: 3px; background: var(--accent); border-radius: 8px; }
+    .section { padding: 88px 0; }
+    .section-heading { max-width: 730px; margin-bottom: 35px; }
+    .section-heading h2 { font-size: clamp(2rem, 3.4vw, 3.05rem); line-height: 1.15; letter-spacing: -.045em; margin: 13px 0 15px; }
+    .section-heading p { color: var(--muted); font-size: 1.07rem; margin: 0; }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid transparent; border-radius: 12px; padding: 12px 19px; font-weight: 750; transition: background .2s, transform .2s, border-color .2s; }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary { background: #295be8; color: #fff; }
+    .button-primary:hover { background: #1848cf; }
+    .button-outline { background: var(--surface); border-color: var(--border); color: var(--ink); }
+    .button-outline:hover { border-color: var(--primary); }
+    .button-soft { background: var(--soft-blue); color: var(--ink); border-color: var(--border); }
+
+    /* Cabeçalho */
+    .site-header { position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--border); }
+    .header-inner { min-height: 78px; display: flex; align-items: center; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-size: 1.4rem; letter-spacing: -.07em; font-weight: 900; white-space: nowrap; }
+    .brand-mark { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: #295be8; color: #fff; font-size: 1.2rem; letter-spacing: 0; }
+    .brand span:last-child { color: var(--primary); }
+    .nav-links { display: flex; align-items: center; gap: 25px; margin-left: auto; }
+    .nav-links a { font-size: .93rem; font-weight: 650; color: var(--muted); }
+    .nav-links a:hover { color: var(--primary); }
+    .header-actions { display: flex; align-items: center; gap: 10px; }
+    .icon-button { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--border); background: var(--surface-alt); color: var(--ink); border-radius: 12px; font-size: 1.2rem; }
+    .menu-button { display: none; }
+
+    /* Abertura */
+    .hero { padding: 95px 0 82px; overflow: hidden; }
+    .hero-grid { display: grid; grid-template-columns: 1.03fr .97fr; align-items: center; gap: 55px; }
+    .hero h1 { font-size: clamp(2.8rem, 5.5vw, 5.25rem); line-height: 1.045; letter-spacing: -.065em; margin: 19px 0 24px; }
+    .hero h1 em { font-style: normal; color: var(--primary); }
+    .hero-intro { max-width: 560px; color: var(--muted); font-size: 1.16rem; margin: 0; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .hero-note { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: .88rem; margin-top: 22px; }
+    .hero-note b { color: var(--accent); }
+    .hero-art { position: relative; padding: 28px 0 10px; }
+    .hero-art::before { content: ""; position: absolute; width: 390px; height: 390px; border-radius: 50%; background: radial-gradient(circle, #b4e9f1 0%, #c5d7ff 38%, transparent 71%); opacity: .48; right: -75px; top: -35px; filter: blur(10px); }
+    .editor-card { position: relative; background: #16243d; color: #f5f8ff; border: 1px solid #384c68; border-radius: 24px; padding: 22px; box-shadow: 0 25px 60px rgba(15, 33, 69, .2); transform: rotate(1.5deg); }
+    .editor-toolbar { display: flex; align-items: center; gap: 7px; border-bottom: 1px solid #374862; padding-bottom: 16px; color: #b4c4dc; font-size: .8rem; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #ff777b; }
+    .dot:nth-child(2) { background: #ffcc66; }.dot:nth-child(3) { background: #57d6af; }
+    .editor-toolbar span:last-child { margin-left: auto; }
+    .editor-content { padding: 24px 6px 13px; }
+    .editor-tag { color: #8ce9d2; font-size: .78rem; text-transform: uppercase; letter-spacing: .15em; font-weight: 800; }
+    .editor-content h2 { line-height: 1.2; font-size: clamp(1.65rem, 2.3vw, 2.1rem); letter-spacing: -.04em; margin: 13px 0 17px; }
+    .editor-content p { color: #c8d6e9; margin: 0 0 18px; font-size: .95rem; }
+    .editor-lines { display: grid; gap: 10px; margin-bottom: 20px; }
+    .editor-lines span { height: 8px; border-radius: 20px; background: #3c5271; }
+    .editor-lines span:nth-child(1) { width: 95%; }.editor-lines span:nth-child(2) { width: 78%; }.editor-lines span:nth-child(3) { width: 87%; }
+    .editor-cta { display: inline-flex; padding: 10px 15px; background: #65dec3; border-radius: 9px; color: #12352e; font-size: .86rem; font-weight: 800; }
+    .floating-tag { position: absolute; right: -23px; bottom: -12px; border: 1px solid #dbf2e9; background: #f0fff8; color: #145c47; padding: 12px 17px; border-radius: 13px; box-shadow: var(--shadow); font-size: .88rem; font-weight: 800; transform: rotate(-4deg); }
+    .feature-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 68px; }
+    .feature-chip { display: flex; align-items: center; gap: 11px; padding: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 15px; font-weight: 700; font-size: .92rem; }
+    .feature-chip span { display: grid; place-items: center; width: 34px; height: 34px; flex: none; background: var(--soft-blue); border-radius: 10px; font-size: 1.05rem; }
+
+    /* Conceitos e princípios */
+    .intro-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 65px; align-items: center; }
+    .intro-grid p { color: var(--muted); font-size: 1.07rem; }
+    .quote-panel { border-radius: 25px; background: var(--soft-blue); padding: 40px; border: 1px solid var(--border); }
+    .quote-panel .quote-mark { color: var(--primary); font-size: 4.5rem; height: 58px; font-family: Georgia, serif; }
+    .quote-panel blockquote { margin: 0; font-size: clamp(1.3rem, 2.1vw, 1.75rem); font-weight: 750; line-height: 1.4; letter-spacing: -.025em; }
+    .quote-panel p { font-size: .94rem; margin: 20px 0 0; }
+    .principles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .principle-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 27px; transition: transform .2s, box-shadow .2s; }
+    .principle-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .principle-icon { width: 49px; height: 49px; display: grid; place-items: center; background: var(--soft-blue); border-radius: 13px; font-size: 1.4rem; margin-bottom: 20px; }
+    .principle-card h3 { margin: 0 0 10px; font-size: 1.2rem; letter-spacing: -.025em; }
+    .principle-card p { color: var(--muted); margin: 0; font-size: .95rem; }
+
+    /* Estrutura e comparação */
+    .structure-section { background: var(--surface-alt); }
+    .structure-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+    .step { display: flex; gap: 17px; padding: 0 0 29px; }
+    .step:not(:last-child) .step-number::after { content: ""; position: absolute; top: 44px; left: 20px; height: calc(100% + 3px); width: 2px; background: var(--border); }
+    .step-number { position: relative; flex: none; width: 43px; height: 43px; display: grid; place-items: center; background: #295be8; color: #fff; border-radius: 12px; font-weight: 850; }
+    .step h3 { margin: 0 0 5px; font-size: 1.12rem; }
+    .step p { margin: 0; color: var(--muted); font-size: .96rem; }
+    .structure-preview { background: var(--surface); border: 1px solid var(--border); padding: 32px; border-radius: 24px; box-shadow: var(--shadow); }
+    .preview-label { font-size: .78rem; font-weight: 850; text-transform: uppercase; letter-spacing: .13em; color: var(--accent); }
+    .structure-preview h3 { font-size: 1.75rem; line-height: 1.2; margin: 14px 0; }
+    .structure-preview p { color: var(--muted); }
+    .structure-preview h4 { font-size: 1.1rem; margin: 23px 0 8px; }
+    .preview-link { display: inline-block; color: var(--primary); font-weight: 750; margin-top: 9px; text-decoration: underline; text-underline-offset: 3px; }
+    .compare-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .compare-card { border-radius: 22px; padding: 30px; background: var(--surface); border: 1px solid var(--border); }
+    .compare-card.after { border-color: var(--accent); box-shadow: inset 0 4px 0 var(--accent); }
+    .compare-card.before { box-shadow: inset 0 4px 0 #eb8793; }
+    .compare-badge { display: inline-block; padding: 5px 11px; border-radius: 7px; background: var(--surface-alt); color: var(--muted); font-size: .75rem; font-weight: 850; text-transform: uppercase; letter-spacing: .07em; }
+    .compare-card h3 { font-size: 1.25rem; margin: 17px 0; }
+    .compare-card p { color: var(--muted); }
+    .compare-card ul { padding-left: 20px; margin-bottom: 0; }
+    .compare-card li { margin: 6px 0; }
+
+    /* Boas práticas e dúvidas */
+    .tips-section { background: var(--surface); }
+    .tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .tip-box { background: var(--bg); border-radius: 20px; padding: 27px; border: 1px solid var(--border); }
+    .tip-box h3 { margin: 0 0 15px; font-size: 1.18rem; }
+    .tip-box ul { padding-left: 20px; margin: 0; color: var(--muted); }
+    .tip-box li { margin-bottom: 10px; }
+    .faq { max-width: 850px; margin-inline: auto; }
+    .faq details { border-bottom: 1px solid var(--border); padding: 19px 4px; }
+    .faq summary { cursor: pointer; font-weight: 750; font-size: 1.06rem; padding-right: 20px; }
+    .faq details p { color: var(--muted); margin: 12px 0 0; }
+
+    /* Testador */
+    .tester-section { background: linear-gradient(180deg, var(--soft-blue), var(--bg) 260px); }
+    .tester-shell { background: var(--surface); border: 1px solid var(--border); border-radius: 26px; padding: 29px; box-shadow: var(--shadow); }
+    .tester-grid { display: grid; grid-template-columns: .94fr 1.06fr; gap: 25px; }
+    .form-field { margin-bottom: 18px; }
+    .form-field label { display: block; font-weight: 750; margin-bottom: 7px; }
+    .form-field small { display: block; color: var(--muted); margin-bottom: 7px; }
+    .form-field input, .form-field textarea { width: 100%; background: var(--bg); color: var(--ink); border: 1px solid var(--border); border-radius: 12px; padding: 13px 14px; outline-offset: 3px; }
+    .form-field input:focus, .form-field textarea:focus { border-color: var(--primary); outline: 2px solid var(--soft-blue); }
+    .form-field textarea { min-height: 292px; resize: vertical; }
+    .tester-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .tester-side { background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 24px; min-width: 0; }
+    .empty-state { min-height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 14px; }
+    .empty-icon { display: grid; place-items: center; width: 72px; height: 72px; background: var(--soft-blue); border-radius: 20px; font-size: 2.1rem; }
+    .empty-state h3 { margin: 0; font-size: 1.3rem; }
+    .empty-state p { margin: 0; max-width: 290px; color: var(--muted); }
+    .hidden { display: none !important; }
+    .score-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+    .score-top h3 { margin: 0; font-size: 1.17rem; }
+    .score-number { font-size: 2.35rem; letter-spacing: -.05em; font-weight: 900; color: var(--primary); line-height: 1; }
+    .progress-track { background: var(--border); height: 12px; border-radius: 20px; margin: 18px 0 10px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #295be8, #0ca890); transition: width .4s; }
+    .score-caption { color: var(--muted); font-size: .93rem; margin: 0 0 20px; }
+    .metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .metric { border: 1px solid var(--border); background: var(--surface); padding: 12px; border-radius: 12px; }
+    .metric strong { display: block; font-size: 1.22rem; }
+    .metric span { color: var(--muted); font-size: .78rem; }
+    .diagnosis-title { margin: 23px 0 10px; font-size: 1rem; }
+    .diagnosis-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .diagnosis-list li { display: flex; gap: 11px; color: var(--muted); font-size: .89rem; }
+    .diagnosis-status { flex: none; display: grid; place-items: center; width: 23px; height: 23px; background: var(--soft-accent); color: #087861; border-radius: 50%; font-weight: 900; }
+    .diagnosis-list li.fix .diagnosis-status { background: #fff0d8; color: #955900; }
+    .diagnosis-list b { color: var(--ink); }
+    .tester-disclaimer { color: var(--muted); font-size: .86rem; margin: 18px 0 0; }
+
+    .cta-band { padding: 55px 0; }
+    .cta-inner { display: flex; align-items: center; justify-content: space-between; gap: 22px; border-radius: 24px; background: #172b50; color: white; padding: 37px 42px; }
+    .cta-inner h2 { font-size: clamp(1.6rem, 2.5vw, 2.2rem); line-height: 1.2; letter-spacing: -.03em; margin: 0 0 8px; }
+    .cta-inner p { margin: 0; color: #c8d6ec; }
+    .cta-inner .button { background: #65dec3; color: #143b32; white-space: nowrap; }
+    footer { border-top: 1px solid var(--border); padding: 28px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 15px; color: var(--muted); font-size: .9rem; }
+    .footer-inner b { color: var(--ink); }
+
+    @media (max-width: 960px) {
+      .nav-links { gap: 14px; }
+      .hero-grid { gap: 27px; }
+      .principles-grid { grid-template-columns: repeat(2, 1fr); }
+      .tester-grid { grid-template-columns: 1fr; }
+      .empty-state { min-height: 240px; }
+    }
+    @media (max-width: 760px) {
+      .header-inner { min-height: 69px; }
+      .menu-button { display: grid; }
+      .nav-links { display: none; position: absolute; top: 69px; left: 0; right: 0; padding: 18px 20px 22px; background: var(--surface); border-bottom: 1px solid var(--border); box-shadow: var(--shadow); flex-direction: column; align-items: stretch; gap: 0; }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 12px 4px; }
+      .header-actions { margin-left: auto; }
+      .hero { padding-top: 62px; }
+      .hero-grid, .intro-grid, .structure-grid, .compare-grid, .tips-grid { grid-template-columns: 1fr; }
+      .hero-art { width: min(520px, calc(100% - 12px)); margin-inline: auto; }
+      .feature-strip { grid-template-columns: repeat(2, 1fr); margin-top: 50px; }
+      .section { padding: 65px 0; }
+      .intro-grid { gap: 24px; }
+      .cta-inner { flex-direction: column; align-items: start; padding: 32px; }
+    }
+    @media (max-width: 520px) {
+      .container { width: min(100% - 30px, 1140px); }
+      .hero h1 { font-size: clamp(2.55rem, 10vw, 3.75rem); }
+      .hero-intro { font-size: 1.04rem; }
+      .hero-actions .button { width: 100%; }
+      .hero-art { padding-top: 10px; }
+      .editor-card { padding: 15px; transform: none; }
+      .editor-content { padding: 20px 4px 8px; }
+      .floating-tag { right: -7px; bottom: -18px; }
+      .feature-strip, .principles-grid { grid-template-columns: 1fr; }
+      .feature-chip { padding: 13px; }
+      .quote-panel, .structure-preview, .compare-card, .principle-card, .tip-box, .tester-shell { padding: 22px; }
+      .tester-side { padding: 17px; }
+      .tester-actions .button { flex: 1 1 100%; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+      .cta-inner { padding: 25px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#inicio" aria-label="Webwriting Lab, voltar ao início">
+        <span class="brand-mark" aria-hidden="true">W.</span>
+        <span>webwriting<span>lab.</span></span>
+      </a>
+      <nav class="nav-links" id="navLinks" aria-label="Navegação principal">
+        <a href="#conceito">O que é</a>
+        <a href="#principios">Princípios</a>
+        <a href="#estrutura">Estrutura</a>
+        <a href="#exemplos">Exemplos</a>
+        <a href="#testador">Testador</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-button" id="themeButton" type="button" aria-label="Ativar modo escuro" aria-pressed="false" title="Alternar tema">☾</button>
+        <button class="icon-button menu-button" id="menuButton" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="navLinks">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="hero" id="inicio" aria-labelledby="heroTitle">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <span class="eyebrow">Guia prático + ferramenta interativa</span>
+            <h1 id="heroTitle">Escrever na web é criar <em>conexões.</em></h1>
+            <p class="hero-intro">Aprenda Webwriting: a arte de transformar informação em conteúdo claro, útil, escaneável e feito para pessoas reais.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#principios">Começar a aprender <span aria-hidden="true">↗</span></a>
+              <a class="button button-outline" href="#testador">Testar meu texto <span aria-hidden="true">→</span></a>
+            </div>
+            <p class="hero-note"><b aria-hidden="true">●</b> Conteúdo gratuito, sem cadastro e com análise no navegador.</p>
+          </div>
+          <div class="hero-art" aria-label="Ilustração de um editor de texto digital">
+            <div class="editor-card">
+              <div class="editor-toolbar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span>meu-conteudo.html</span></div>
+              <div class="editor-content">
+                <span class="editor-tag"># Conteúdo que funciona</span>
+                <h2>Uma ideia clara vale mais do que um texto complicado.</h2>
+                <p>Fale com quem lê. Vá direto ao ponto. Dê o próximo passo.</p>
+                <div class="editor-lines" aria-hidden="true"><span></span><span></span><span></span></div>
+                <span class="editor-cta">Continue lendo →</span>
+              </div>
+            </div>
+            <span class="floating-tag">✓ Fácil de ler</span>
+          </div>
+        </div>
+        <div class="feature-strip" aria-label="Temas abordados">
+          <div class="feature-chip"><span aria-hidden="true">✦</span> Clareza</div>
+          <div class="feature-chip"><span aria-hidden="true">☷</span> Escaneabilidade</div>
+          <div class="feature-chip"><span aria-hidden="true">⌕</span> SEO</div>
+          <div class="feature-chip"><span aria-hidden="true">◎</span> Acessibilidade</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section intro-section" id="conceito">
+      <div class="container intro-grid">
+        <div>
+          <span class="eyebrow">01 / Conceito</span>
+          <div class="section-heading">
+            <h2>Afinal, o que é Webwriting?</h2>
+            <p>Webwriting é a prática de planejar, organizar e escrever conteúdo pensado para ambientes digitais: sites, blogs, páginas de produtos, e-mails e aplicativos.</p>
+          </div>
+          <p>Na internet, a pessoa muitas vezes procura uma resposta rápida. Por isso, a escrita precisa facilitar a leitura em diferentes telas, orientar a navegação e apresentar a informação importante primeiro.</p>
+          <p>Não é apenas escrever textos curtos: é <strong>escrever com intenção, contexto e atenção às necessidades de quem lê.</strong></p>
+        </div>
+        <div class="quote-panel">
+          <div class="quote-mark" aria-hidden="true">“</div>
+          <blockquote>Bom conteúdo digital não obriga a pessoa a procurar a resposta. Ele ajuda a encontrá-la.</blockquote>
+          <p>Ideia central do Webwriting: menos obstáculos, mais entendimento.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="principios">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">02 / Fundamentos</span>
+          <h2>Os 6 pilares de um texto que funciona na web</h2>
+          <p>Esses princípios orientam desde um artigo longo até o texto de um pequeno botão.</p>
+        </div>
+        <div class="principles-grid">
+          <article class="principle-card"><div class="principle-icon" aria-hidden="true">✎</div><h3>1. Clareza e objetividade</h3><p>Prefira palavras conhecidas, frases diretas e uma ideia principal por parágrafo. Evite rodeios e jargões desnecessários.</p></article>
+          <article class="principle-card"><div class="principle-icon" aria-hidden="true">☷</div><h3>2. Leitura escaneável</h3><p>Use títulos informativos, subtítulos, listas quando úteis e parágrafos curtos para facilitar a localização das respostas.</p></article>
+          <article class="principle-card"><div class="principle-icon" aria-hidden="true">♡</div><h3>3. Foco em quem lê</h3><p>Entenda o público, a dúvida que ele deseja resolver e o que precisa fazer depois da leitura.</p></article>
+          <article class="principle-card"><div class="principle-icon" aria-hidden="true">⌕</div><h3>4. SEO com naturalidade</h3><p>Organize o conteúdo para mecanismos de busca, com termos relevantes, títulos descritivos e respostas úteis, sem repetir palavras à força.</p></article>
+          <article class="principle-card"><div class="principle-icon" aria-hidden="true">◉</div><h3>5. Acessibilidade</h3><p>Crie links compreensíveis, hierarquia de títulos consistente e textos simples, acessíveis também em dispositivos móveis.</p></article>
+          <article class="principle-card"><div class="principle-icon" aria-hidden="true">↗</div><h3>6. Orientação para ação</h3><p>Deixe claro qual é o próximo passo: conhecer um serviço, comparar opções, preencher um formulário ou continuar a leitura.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section structure-section" id="estrutura">
+      <div class="container">
+        <div class="section-heading"><span class="eyebrow">03 / Na prática</span><h2>Como estruturar um bom texto digital</h2><p>Uma organização simples ajuda a guiar a atenção do leitor do começo ao fim.</p></div>
+        <div class="structure-grid">
+          <div>
+            <div class="step"><span class="step-number">1</span><div><h3>Comece pelo objetivo</h3><p>Defina a pergunta que o conteúdo responde e qual pessoa você quer alcançar.</p></div></div>
+            <div class="step"><span class="step-number">2</span><div><h3>Crie um título útil</h3><p>Mostre o assunto e, quando possível, o benefício. Evite títulos vagos ou sensacionalistas.</p></div></div>
+            <div class="step"><span class="step-number">3</span><div><h3>Entregue o essencial na abertura</h3><p>Explique logo no início o ponto central. Depois, aprofunde em blocos bem organizados.</p></div></div>
+            <div class="step"><span class="step-number">4</span><div><h3>Divida por assuntos</h3><p>Use subtítulos descritivos, exemplos e listas apenas quando melhorarem a compreensão.</p></div></div>
+            <div class="step"><span class="step-number">5</span><div><h3>Finalize com o próximo passo</h3><p>Inclua uma chamada para ação (CTA) relevante e revise a legibilidade no celular.</p></div></div>
+          </div>
+          <article class="structure-preview" aria-label="Exemplo de estrutura de artigo">
+            <span class="preview-label">Modelo de conteúdo</span>
+            <h3>Como organizar sua rotina de estudos</h3>
+            <p>Quer estudar com mais constância? Comece definindo horários possíveis e prioridades para cada semana.</p>
+            <h4>1. Defina metas realistas</h4>
+            <p>Escolha poucos objetivos e distribua as tarefas em blocos de tempo que caibam na sua rotina.</p>
+            <h4>2. Revise seu planejamento</h4>
+            <p>Ao fim de cada semana, observe o que funcionou e ajuste o plano sem se cobrar perfeição.</p>
+            <span class="preview-link">Monte seu planejamento →</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="exemplos">
+      <div class="container">
+        <div class="section-heading"><span class="eyebrow">04 / Antes e depois</span><h2>A mesma mensagem. Uma experiência diferente.</h2><p>Veja como pequenas mudanças tornam a informação mais direta e fácil de encontrar.</p></div>
+        <div class="compare-grid">
+          <article class="compare-card before"><span class="compare-badge">Antes — difícil de ler</span><h3>Informações referentes às nossas funcionalidades</h3><p>Por meio da utilização de nossa plataforma, torna-se possível a realização de diversos procedimentos referentes à organização de compromissos, os quais poderão ser efetuados de maneira simplificada pelos usuários.</p><ul><li>Título genérico</li><li>Frase longa e impessoal</li><li>Benefício pouco evidente</li></ul></article>
+          <article class="compare-card after"><span class="compare-badge">Depois — claro e direto</span><h3>Organize seus compromissos em poucos passos</h3><p>Reúna seus compromissos em um só lugar. Crie lembretes, acompanhe horários e ajuste sua agenda de forma simples.</p><ul><li>Título apresenta o benefício</li><li>Frases curtas e verbos diretos</li><li>Foco no que a pessoa consegue fazer</li></ul></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tips-section" id="boas-praticas">
+      <div class="container">
+        <div class="section-heading"><span class="eyebrow">05 / Revisão</span><h2>Checklist antes de publicar</h2><p>SEO, experiência de leitura e acessibilidade se complementam. Revise estes pontos.</p></div>
+        <div class="tips-grid">
+          <div class="tip-box"><h3>Para melhorar a leitura</h3><ul><li>O título explica claramente o assunto?</li><li>A informação principal aparece no início?</li><li>Os parágrafos tratam de uma ideia por vez?</li><li>Subtítulos ajudam a localizar respostas?</li><li>Links e botões dizem para onde levam?</li></ul></div>
+          <div class="tip-box"><h3>Para melhorar a descoberta</h3><ul><li>O conteúdo responde à intenção de busca?</li><li>O termo principal aparece naturalmente no texto?</li><li>Há uma hierarquia coerente de títulos?</li><li>As informações estão corretas e atualizadas?</li><li>A página é confortável de usar no celular?</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="duvidas">
+      <div class="container">
+        <div class="section-heading"><span class="eyebrow">06 / Perguntas frequentes</span><h2>Dúvidas comuns sobre Webwriting</h2></div>
+        <div class="faq">
+          <details><summary>Webwriting é a mesma coisa que SEO?</summary><p>Não. Webwriting se concentra na criação de conteúdo adequado à leitura e à navegação digital. SEO inclui ações para ajudar páginas a serem encontradas nos mecanismos de busca. As duas práticas se relacionam, mas não são sinônimas.</p></details>
+          <details><summary>Textos para a internet precisam ser sempre curtos?</summary><p>Não. O tamanho ideal depende do objetivo e da complexidade do tema. Um tutorial pode ser longo e continuar fácil de ler se estiver bem organizado, com exemplos e subtítulos úteis.</p></details>
+          <details><summary>O que é CTA?</summary><p>CTA significa <em>call to action</em>, ou chamada para ação. É um convite claro para o próximo passo, como “Veja os exemplos”, “Agende uma conversa” ou “Conheça os planos”.</p></details>
+          <details><summary>Como escrever de forma mais acessível?</summary><p>Prefira linguagem clara, mantenha uma ordem lógica de títulos, evite depender apenas de cores para comunicar algo e escreva textos de links que façam sentido fora do contexto imediato.</p></details>
+          <details><summary>O testador substitui uma revisão humana?</summary><p>Não. Ele oferece verificações automáticas simples de estrutura e legibilidade. Não avalia com profundidade a qualidade das informações, a gramática, o contexto, a originalidade ou o posicionamento real nos buscadores.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tester-section" id="testador">
+      <div class="container">
+        <div class="section-heading"><span class="eyebrow">07 / Mão na massa</span><h2>Teste a qualidade do seu texto</h2><p>Cole um conteúdo, informe o título e receba uma análise automática com sugestões para melhorar a escrita na web. Tudo acontece no seu navegador.</p></div>
+        <div class="tester-shell">
+          <div class="tester-grid">
+            <form id="testForm" novalidate>
+              <div class="form-field"><label for="titulo">Título do conteúdo</label><input id="titulo" name="titulo" type="text" maxlength="180" placeholder="Ex.: Como escrever textos claros para a web" required></div>
+              <div class="form-field"><label for="palavraChave">Palavra-chave principal <span style="font-weight:400;color:var(--muted)">(opcional)</span></label><input id="palavraChave" name="palavraChave" type="text" maxlength="80" placeholder="Ex.: webwriting"></div>
+              <div class="form-field"><label for="texto">Seu texto</label><small>Separe os parágrafos com uma linha vazia. Para subtítulos, comece a linha com <strong>##</strong>.</small><textarea id="texto" name="texto" placeholder="Cole ou escreva seu texto aqui..." required></textarea></div>
+              <div class="tester-actions"><button class="button button-primary" type="submit">Analisar texto ↗</button><button class="button button-soft" id="exampleButton" type="button">Carregar exemplo</button><button class="button button-outline" id="clearButton" type="button">Limpar</button></div>
+            </form>
+            <div class="tester-side" aria-live="polite" aria-atomic="false">
+              <div class="empty-state" id="emptyState"><div class="empty-icon" aria-hidden="true">▤</div><h3>Sua análise aparece aqui</h3><p>Preencha os campos e clique em “Analisar texto” ou use um exemplo para experimentar.</p></div>
+              <div id="results" class="hidden">
+                <div class="score-top"><h3>Pontuação orientativa</h3><span class="score-number" id="scoreNumber">0/100</span></div>
+                <div class="progress-track" role="progressbar" id="scoreBar" aria-label="Pontuação do texto" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progressFill"></div></div>
+                <p class="score-caption" id="scoreCaption"></p>
+                <div class="metrics">
+                  <div class="metric"><strong id="wordCount">0</strong><span>Palavras</span></div>
+                  <div class="metric"><strong id="sentenceAverage">0</strong><span>Palavras por frase (média)</span></div>
+                  <div class="metric"><strong id="paragraphCount">0</strong><span>Parágrafos</span></div>
+                  <div class="metric"><strong id="readingTime">0 min</strong><span>Tempo estimado de leitura</span></div>
+                </div>
+                <h4 class="diagnosis-title">O que está funcionando e o que melhorar</h4>
+                <ul class="diagnosis-list" id="diagnosisList"></ul>
+              </div>
+            </div>
+          </div>
+          <p class="tester-disclaimer"><strong>Como funciona?</strong> A pontuação usa critérios simplificados de título, extensão, parágrafos, frases, subtítulos, chamada para ação e palavra-chave (quando informada). Ela não é uma nota oficial de SEO nem uma avaliação gramatical.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <div class="container cta-inner"><div><h2>Escreva com propósito. Publique com clareza.</h2><p>Use os princípios do guia e revise sempre com o olhar de quem vai ler.</p></div><a class="button" href="#inicio">Voltar ao início ↑</a></div>
+    </section>
+  </main>
+
+  <footer><div class="container footer-inner"><p><b>webwritinglab.</b> — Aprendizado prático de escrita digital.</p><p><a href="index.html" style="color:var(--primary);font-weight:700;text-decoration:underline;text-underline-offset:3px">Central de estudos</a> · <a href="seo-seguranca.html" style="color:var(--primary);font-weight:700;text-decoration:underline;text-underline-offset:3px">SEO e Segurança Web</a></p><p>© <span id="year"></span> · Feito para aprender e experimentar.</p></div></footer>
+
+  <script>
+    const menuButton = document.getElementById('menuButton');
+    const navLinks = document.getElementById('navLinks');
+    const themeButton = document.getElementById('themeButton');
+
+    function closeMenu() {
+      navLinks.classList.remove('open');
+      menuButton.setAttribute('aria-expanded', 'false');
+      menuButton.setAttribute('aria-label', 'Abrir menu');
+      menuButton.textContent = '☰';
+    }
+    menuButton.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      menuButton.setAttribute('aria-expanded', String(isOpen));
+      menuButton.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
+      menuButton.textContent = isOpen ? '✕' : '☰';
+    });
+    navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
+    window.addEventListener('resize', () => { if (window.innerWidth > 760) closeMenu(); });
+
+    function applyTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+      const dark = theme === 'dark';
+      themeButton.textContent = dark ? '☀' : '☾';
+      themeButton.setAttribute('aria-label', dark ? 'Ativar modo claro' : 'Ativar modo escuro');
+      themeButton.setAttribute('aria-pressed', String(dark));
+      try { localStorage.setItem('webwriting-theme', theme); } catch (_) {}
+    }
+    let savedTheme = 'light';
+    try { savedTheme = localStorage.getItem('webwriting-theme') || 'light'; } catch (_) {}
+    applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
+    themeButton.addEventListener('click', () => applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const testForm = document.getElementById('testForm');
+    const titleInput = document.getElementById('titulo');
+    const keywordInput = document.getElementById('palavraChave');
+    const textInput = document.getElementById('texto');
+    const results = document.getElementById('results');
+    const emptyState = document.getElementById('emptyState');
+
+    const wordsIn = value => value.match(/[\p{L}\p{N}]+(?:[’'-][\p{L}\p{N}]+)*/gu) || [];
+    const countWords = value => wordsIn(value).length;
+    const normalize = value => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR');
+
+    function analyzeText() {
+      const title = titleInput.value.trim();
+      const keyword = keywordInput.value.trim();
+      const content = textInput.value.trim();
+      if (!title || !content) {
+        window.alert('Preencha o título e o texto para iniciar a análise.');
+        (!title ? titleInput : textInput).focus();
+        return;
+      }
+
+      const paragraphs = content.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+      const bodyParagraphs = paragraphs.flatMap(p => p.split(/\n(?=#{1,6}\s)/)).map(p => p.trim()).filter(p => p && !/^#{1,6}\s/.test(p));
+      const headings = content.split('\n').filter(line => /^#{2,6}\s+\S/.test(line.trim()));
+      const prose = content.replace(/^#{1,6}\s+.*$/gm, '').trim();
+      const sentenceParts = prose.split(/[.!?…]+(?:\s|$)/u).map(s => s.trim()).filter(s => countWords(s) > 0);
+      const wordCount = countWords(content);
+      const proseWordCount = countWords(prose);
+      const averageSentence = sentenceParts.length ? proseWordCount / sentenceParts.length : 0;
+      const longParagraphs = bodyParagraphs.filter(p => countWords(p) > 80).length;
+      const hasCTA = /\b(saiba mais|conheca|confira|descubra|acesse|veja|comece|experimente|cadastre-se|inscreva-se|entre em contato|fale conosco|baixe|solicite|agende|compartilhe|clique|aprenda|teste|monte)\b/i.test(normalize(content));
+
+      const checks = [
+        { pass: title.length >= 25 && title.length <= 65, label: 'Título objetivo', tip: 'Tente manter o título entre 25 e 65 caracteres.', weight: 15 },
+        { pass: wordCount >= 80, label: 'Conteúdo desenvolvido', tip: 'Para este teste, use ao menos 80 palavras. Textos curtos podem ser adequados em outros contextos.', weight: 10 },
+        { pass: averageSentence > 0 && averageSentence <= 22, label: 'Frases fáceis de acompanhar', tip: 'Encurte frases longas. A meta orientativa é até 22 palavras por frase, em média.', weight: 15 },
+        { pass: bodyParagraphs.length > 0 && longParagraphs === 0, label: 'Parágrafos enxutos', tip: `Há ${longParagraphs} parágrafo(s) com mais de 80 palavras. Divida ideias em blocos menores.`, weight: 15 },
+        { pass: headings.length >= 1, label: 'Uso de subtítulos', tip: 'Adicione subtítulos para orientar a leitura. Neste campo, comece linhas com ##.', weight: 10 },
+        { pass: hasCTA, label: 'Próximo passo indicado', tip: 'Inclua uma chamada para ação quando ela fizer sentido para seu objetivo.', weight: 15 }
+      ];
+      if (keyword) {
+        const key = normalize(keyword);
+        checks.push(
+          { pass: normalize(title).includes(key), label: 'Palavra-chave no título', tip: 'Quando natural, inclua a palavra-chave principal no título.', weight: 10 },
+          { pass: normalize(content).includes(key), label: 'Palavra-chave no texto', tip: 'Use o termo principal naturalmente no conteúdo, sem exagerar na repetição.', weight: 10 }
+        );
+      }
+
+      const totalWeight = checks.reduce((sum, check) => sum + check.weight, 0);
+      const earnedWeight = checks.reduce((sum, check) => sum + (check.pass ? check.weight : 0), 0);
+      const score = Math.round(100 * earnedWeight / totalWeight);
+      const verdict = score >= 85 ? 'Ótimo ponto de partida! Revise também precisão, tom e contexto.' : score >= 60 ? 'Seu texto tem boas bases. Veja os pontos de melhoria abaixo.' : 'Há oportunidades de tornar a leitura mais clara e organizada.';
+
+      document.getElementById('scoreNumber').textContent = `${score}/100`;
+      document.getElementById('progressFill').style.width = `${score}%`;
+      document.getElementById('scoreBar').setAttribute('aria-valuenow', String(score));
+      document.getElementById('scoreCaption').textContent = verdict;
+      document.getElementById('wordCount').textContent = String(wordCount);
+      document.getElementById('sentenceAverage').textContent = averageSentence.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
+      document.getElementById('paragraphCount').textContent = String(bodyParagraphs.length);
+      document.getElementById('readingTime').textContent = `${Math.max(1, Math.ceil(wordCount / 200))} min`;
+
+      const diagnosisList = document.getElementById('diagnosisList');
+      diagnosisList.replaceChildren();
+      checks.forEach(check => {
+        const li = document.createElement('li');
+        li.className = check.pass ? 'good' : 'fix';
+        const status = document.createElement('span');
+        status.className = 'diagnosis-status';
+        status.textContent = check.pass ? '✓' : '!';
+        status.setAttribute('aria-hidden', 'true');
+        const description = document.createElement('span');
+        const strong = document.createElement('b');
+        strong.textContent = `${check.pass ? 'OK' : 'Ajustar'} — ${check.label}. `;
+        description.append(strong, document.createTextNode(check.pass ? 'Critério atendido.' : check.tip));
+        li.append(status, description);
+        diagnosisList.append(li);
+      });
+      emptyState.classList.add('hidden');
+      results.classList.remove('hidden');
+    }
+
+    testForm.addEventListener('submit', event => { event.preventDefault(); analyzeText(); });
+    document.getElementById('clearButton').addEventListener('click', () => {
+      testForm.reset();
+      results.classList.add('hidden');
+      emptyState.classList.remove('hidden');
+      titleInput.focus();
+    });
+    document.getElementById('exampleButton').addEventListener('click', () => {
+      titleInput.value = 'Webwriting: como escrever melhor para a internet';
+      keywordInput.value = 'webwriting';
+      textInput.value = `Webwriting é a prática de criar textos claros e úteis para ambientes digitais. Com algumas mudanças simples, você pode ajudar as pessoas a encontrar respostas e navegar pelo conteúdo sem dificuldade.\n\n## Comece pela necessidade de quem lê\n\nAntes de escrever, descubra qual pergunta seu público quer responder. Organize a informação principal logo na abertura. Prefira palavras conhecidas e elimine expressões que não acrescentam sentido.\n\n## Facilite a leitura no celular\n\nUse subtítulos que expliquem o assunto de cada bloco. Faça parágrafos curtos e destaque informações relevantes com moderação. Uma estrutura simples evita que o leitor precise procurar a mesma resposta várias vezes.\n\n## Revise antes de publicar\n\nLeia o conteúdo novamente e confira se o título corresponde ao texto. Verifique também se os links são claros e se a chamada final combina com a intenção da página.\n\nQuer praticar agora? Teste seu próximo texto e descubra quais pontos você pode melhorar.`;
+      analyzeText();
+    });
+  </script>
+</body>
+</html>
